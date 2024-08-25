@@ -22,7 +22,6 @@ import static net.runelite.client.ui.overlay.OverlayManager.OPTION_CONFIGURE;
 public class MaxHitOverlay extends Overlay {
 
     private static final Color COMBAT_LEVEL_COLOUR = new Color(0xff981f);
-
     private final MaxHitPlugin plugin;
     private final MaxHitConfig config;
     private final Client client;
@@ -73,41 +72,45 @@ public class MaxHitOverlay extends Overlay {
                     .build());
         }
 
+        //If showNextMaxHit is selected and mouse is inside the overlay show the next max hit tooltip
         if (config.showNextMaxHit() && this.getBounds().contains(
                 client.getMouseCanvasPosition().getX(),
                 client.getMouseCanvasPosition().getY())) {
             tooltipManager.add(new Tooltip(getNextMaxHitTooltip()));
         }
 
-        HashMap<String, InventoryWeapon> map = plugin.equipableItems();
-        if (map == null) {
+        if (plugin.map == null) {
             return panelComponent.render(graphics);
         }
-        for (Object weapon : map.keySet()) {
+
+        for (Object weapon : plugin.map.keySet()) {
             String wep = weapon.toString();
             if (config.inventoryWeapons()) {
                 panelComponent.getChildren().add(LineComponent.builder()
-                        .left(map.get(wep).name)
-                        .right(Double.toString(Math.floor(map.get(wep).maxHitBase)))
+                        .left(plugin.map.get(wep).name)
+                        .right(Double.toString(Math.floor(plugin.map.get(wep).maxHitBase)))
                         .build());
             }
-            if (map.get(wep).maxHitSpec > 0 && config.invetoryWeaponsSpecial()) {
+            if (plugin.map.get(wep).maxHitSpec > 0 && config.inventoryWeaponsSpecial()) {
                 panelComponent.getChildren().add(LineComponent.builder()
-                        .left(map.get(wep).name + " Spec")
-                        .right(Double.toString(Math.floor(map.get(wep).maxHitSpec)))
+                        .left(plugin.map.get(wep).name + " Spec")
+                        .right(Double.toString(Math.floor(plugin.map.get(wep).maxHitSpec)))
                         .build());
             }
-            if (config.inventorySelectiveSpecial() && !config.inventoryWeapons() && !config.invetoryWeaponsSpecial()) {
-                if (map.get(wep).maxHitSpec <= 0) {
+            if (config.inventorySelectiveSpecial() &&
+                    !config.inventoryWeapons() &&
+                    !config.inventoryWeaponsSpecial()) {
+
+                if (plugin.map.get(wep).maxHitSpec <= 0) {
                     panelComponent.getChildren().add(LineComponent.builder()
-                            .left(map.get(wep).name)
-                            .right(Double.toString(Math.floor(map.get(wep).maxHitBase)))
+                            .left(plugin.map.get(wep).name)
+                            .right(Double.toString(Math.floor(plugin.map.get(wep).maxHitBase)))
                             .build());
                 }
                 else {
                     panelComponent.getChildren().add(LineComponent.builder()
-                            .left(map.get(wep).name + " Spec")
-                            .right(Double.toString(Math.floor(map.get(wep).maxHitSpec)))
+                            .left(plugin.map.get(wep).name + " Spec")
+                            .right(Double.toString(Math.floor(plugin.map.get(wep).maxHitSpec)))
                             .build());
                 }
             }

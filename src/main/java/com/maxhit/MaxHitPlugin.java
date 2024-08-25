@@ -54,13 +54,14 @@ public class MaxHitPlugin extends Plugin {
 	}
 
 	@Getter
-	private Item[] equippedItems;
+	public Item[] equippedItems;
 	@Getter
-	private Item[] inventoryItems;
+	public Item[] inventoryItems;
 
-	private int equippedWeaponTypeVarbit = -1;
+	@Getter
+	public HashMap<String, InventoryWeapon> map;
 
-	@Override
+    @Override
 	public void startUp() throws Exception {
 		overlayManager.add(myOverlay);
 
@@ -88,6 +89,7 @@ public class MaxHitPlugin extends Plugin {
 		if (event.getContainerId() == InventoryID.EQUIPMENT.getId()) {
 			equippedItems = itemContainer.getItems();
 			getEquippedItemsIds();
+			map = equipableItems();
 			return;
 		}
 		if (event.getContainerId() != InventoryID.INVENTORY.getId()) {
@@ -106,9 +108,8 @@ public class MaxHitPlugin extends Plugin {
 			final int currentAttackStyleVarbit = client.getVarpValue(VarPlayer.ATTACK_STYLE);
 			final int currentEquippedWeaponTypeVarbit = client.getVarbitValue(Varbits.EQUIPPED_WEAPON_TYPE);
 			final int currentCastingModeVarbit = client.getVarbitValue(Varbits.DEFENSIVE_CASTING_MODE);
-			equippedWeaponTypeVarbit = currentEquippedWeaponTypeVarbit;
 
-			updateAttackStyle(equippedWeaponTypeVarbit, currentAttackStyleVarbit,
+            updateAttackStyle(currentEquippedWeaponTypeVarbit, currentAttackStyleVarbit,
 					currentCastingModeVarbit);
 		}
 	}
@@ -124,7 +125,9 @@ public class MaxHitPlugin extends Plugin {
 	private final ObsidianSet obsidianSetChecker = new ObsidianSet();
 	private final HashMap<String, Integer> equippedItemIds = new HashMap<String, Integer>();
 	private final HashMap<String, InventoryWeapon> inventoryWeaponsHashMap = new HashMap<>();
-	private void getEquippedItemsIds() {
+	public void getEquippedItemsIds() {
+		if (equippedItems == null)
+			return;
 		equippedItemIds.put("head", equippedItems[EquipmentInventorySlot.HEAD.getSlotIdx()].getId());
 		equippedItemIds.put("cape", equippedItems[EquipmentInventorySlot.CAPE.getSlotIdx()].getId());
 		equippedItemIds.put("amulet", equippedItems[EquipmentInventorySlot.AMULET.getSlotIdx()].getId());
