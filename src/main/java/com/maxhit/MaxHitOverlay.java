@@ -14,7 +14,6 @@ import net.runelite.client.util.ColorUtil;
 
 import javax.inject.Inject;
 import java.awt.*;
-import java.util.HashMap;
 
 import static net.runelite.api.MenuAction.RUNELITE_OVERLAY_CONFIG;
 import static net.runelite.client.ui.overlay.OverlayManager.OPTION_CONFIGURE;
