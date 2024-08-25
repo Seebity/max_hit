@@ -30,7 +30,7 @@ import static com.maxhit.AttackStyle.*;
 @PluginDescriptor(
 		name = "Max Hit",
 		description = "Displays current max hit",
-		enabledByDefault = false,
+		enabledByDefault = true,
 		tags = {"max, hit, spec, pvp, magic, spell, combat"}
 )
 
